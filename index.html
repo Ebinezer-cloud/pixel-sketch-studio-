@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pixel Sketch Studio</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">✎</span>
+    <div>
+      <h1>Pixel Sketch Studio</h1>
+      <p>Turn any photo into art</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="resetBtn" class="btn ghost" disabled>Reset</button>
+    <button id="pdfBtn" class="btn ghost" disabled>Download A4 PDF</button>
+    <button id="downloadBtn" class="btn primary" disabled>Download PNG</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- LEFT: tools -->
+  <aside class="panel tools">
+    <h2>1 · Upload</h2>
+    <label id="dropzone" class="dropzone">
+      <input type="file" id="fileInput" accept="image/*" hidden />
+      <span class="dz-icon">⬆</span>
+      <strong>Drop a photo here</strong>
+      <small>or click to browse</small>
+    </label>
+
+    <h2>2 · A4 Page</h2>
+    <div class="seg" id="orientSeg">
+      <button class="seg-btn active" data-orient="portrait">Portrait</button>
+      <button class="seg-btn" data-orient="landscape">Landscape</button>
+    </div>
+    <div class="seg" id="fitSeg">
+      <button class="seg-btn active" data-fit="fit">Fit whole photo</button>
+      <button class="seg-btn" data-fit="fill">Fill page</button>
+    </div>
+
+    <h2>3 · Effect</h2>
+    <div class="effects" id="effects">
+      <button class="effect active" data-effect="sketch"><span>✏️</span>Sketch Drawing</button>
+      <button class="effect" data-effect="pencil"><span>🖍️</span>Pencil Drawing</button>
+      <button class="effect" data-effect="blood"><span>🩸</span>Blood Drawing</button>
+      <button class="effect" data-effect="cartoon"><span>🎨</span>Cartoon Pencil</button>
+    </div>
+
+    <h2>4 · Adjust</h2>
+    <div class="sliders">
+      <label>Intensity <output id="o-intensity">60</output>
+        <input type="range" id="intensity" min="0" max="100" value="60" /></label>
+      <label>Detail <output id="o-detail">50</output>
+        <input type="range" id="detail" min="0" max="100" value="50" /></label>
+      <label>Paper grain <output id="o-grain">30</output>
+        <input type="range" id="grain" min="0" max="100" value="30" /></label>
+    </div>
+  </aside>
+
+  <!-- CENTER: canvas -->
+  <section class="panel stage">
+    <div class="tabs">
+      <button class="tab active" data-view="slider">Before / After</button>
+      <button class="tab" data-view="before">Before</button>
+      <button class="tab" data-view="after">After</button>
+    </div>
+    <div class="canvas-wrap" id="canvasWrap">
+      <div class="empty" id="emptyState">
+        <div class="empty-art">🖼️</div>
+        <p>Upload a photo to start editing</p>
+      </div>
+      <div class="compare hidden" id="compare">
+        <canvas id="afterCanvas"></canvas>
+        <div class="before-clip" id="beforeClip"><canvas id="beforeCanvas"></canvas></div>
+        <div class="handle" id="handle"><span></span></div>
+        <span class="tag tag-before">BEFORE</span>
+        <span class="tag tag-after">AFTER</span>
+      </div>
+      <div class="busy hidden" id="busy"><div class="spinner"></div></div>
+    </div>
+  </section>
+
+  <!-- RIGHT: analytics -->
+  <aside class="panel analytics">
+    <h2>Analytics</h2>
+    <div class="stat-grid">
+      <div class="stat"><small>Size</small><strong id="s-size">—</strong></div>
+      <div class="stat"><small>Effect</small><strong id="s-effect">—</strong></div>
+      <div class="stat"><small>Render time</small><strong id="s-time">—</strong></div>
+      <div class="stat"><small>Edits made</small><strong id="s-edits">0</strong></div>
+    </div>
+
+    <table class="cmp">
+      <thead><tr><th>Metric</th><th>Before</th><th>After</th><th>Δ</th></tr></thead>
+      <tbody>
+        <tr><td>Brightness</td><td id="b-bright">—</td><td id="a-bright">—</td><td id="d-bright">—</td></tr>
+        <tr><td>Contrast</td><td id="b-contrast">—</td><td id="a-contrast">—</td><td id="d-contrast">—</td></tr>
+        <tr><td>Saturation</td><td id="b-sat">—</td><td id="a-sat">—</td><td id="d-sat">—</td></tr>
+        <tr><td>Edge density</td><td id="b-edge">—</td><td id="a-edge">—</td><td id="d-edge">—</td></tr>
+        <tr><td>Unique colours</td><td id="b-col">—</td><td id="a-col">—</td><td id="d-col">—</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Brightness histogram</h3>
+    <canvas id="histCanvas" width="300" height="120"></canvas>
+    <div class="legend"><i class="lg-b"></i>Before <i class="lg-a"></i>After</div>
+
+    <h3>Edit history</h3>
+    <ul id="history" class="history"><li class="muted">No edits yet</li></ul>
+  </aside>
+</main>
+
+<script src="effects.js"></script>
+<script src="pdf.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
